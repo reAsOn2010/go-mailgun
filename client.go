@@ -19,10 +19,16 @@ const (
 type Client struct {
 	httpClient *http.Client
 	key        string
+	logger     ErrorLogger
 }
 
 func New(key string) *Client {
-	return &Client{httpClient: &http.Client{}, key: key}
+	l := FmtErrorLogger{}
+	return &Client{httpClient: &http.Client{}, key: key, logger: l}
+}
+
+func (c *Client) SetLogger(l ErrorLogger) {
+	c.logger = l
 }
 
 // make an api request
@@ -54,7 +60,9 @@ func (c *Client) api(method string, path string, fields url.Values) (body []byte
 		return
 	}
 	if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
-		err = fmt.Errorf("mailgun error: %d %s", rsp.StatusCode, body)
+		//err = fmt.Errorf("mailgun error: %d %s", rsp.StatusCode, body)
+        msg := string(body[:])
+		err = c.logger.ErrorLog("mailgun SMTP", rsp.StatusCode, msg)
 	}
 	return
 }
