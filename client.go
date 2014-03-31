@@ -61,8 +61,8 @@ func (c *Client) api(method string, path string, fields url.Values) (body []byte
 	}
 	if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
 		//err = fmt.Errorf("mailgun error: %d %s", rsp.StatusCode, body)
-        msg := string(body[:])
-		err = c.logger.ErrorLog("mailgun SMTP", rsp.StatusCode, msg)
+		msg := string(body[:])
+		err = c.logger.ErrorLog("mailgun.error", rsp.StatusCode, msg)
 	}
 	return
 }
