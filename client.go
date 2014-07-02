@@ -63,6 +63,6 @@ func (c *Client) api(method string, path string, fields url.Values) (body []byte
 	}
 	//err = fmt.Errorf("mailgun error: %d %s", rsp.StatusCode, body)
 	msg := string(body[:])
-	err = c.logger.ErrorLog("mailgun.error", rsp.StatusCode, msg)
+	go c.logger.ErrorLog("mailgun.error", rsp.StatusCode, msg)
 	return
 }
