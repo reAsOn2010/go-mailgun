@@ -9,11 +9,13 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 const (
 	API_VERSION  = 2
 	API_ENDPOINT = "api.mailgun.net"
+	HTTP_TIMEOUT = 5 * time.Second
 )
 
 type Client struct {
@@ -24,7 +26,7 @@ type Client struct {
 
 func New(key string) *Client {
 	l := FmtErrorLogger{}
-	return &Client{httpClient: &http.Client{}, key: key, logger: l}
+	return &Client{httpClient: &http.Client{Timeout: time.Duration(HTTP_TIMEOUT)}, key: key, logger: l}
 }
 
 func (c *Client) SetLogger(l ErrorLogger) {
