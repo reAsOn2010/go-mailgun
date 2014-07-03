@@ -52,9 +52,11 @@ func (wh *Webhook) Handle(w http.ResponseWriter, req *http.Request) (evt *Event,
 	}
 
 	if err = req.ParseMultipartForm(MAX_FORM_SIZE); err != nil {
-		err = ErrInvalidForm
-		http.Error(w, "invalid form", http.StatusBadRequest)
-		return
+		if err != http.ErrNotMultipart {
+			err = ErrInvalidForm
+			http.Error(w, "invalid form", http.StatusBadRequest)
+			return
+		}
 	}
 
 	ts := req.Form.Get("timestamp")
