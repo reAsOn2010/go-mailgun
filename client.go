@@ -26,7 +26,7 @@ type Client struct {
 
 func New(key string) *Client {
 	l := FmtErrorLogger{}
-	tr := &http.Transport{MaxIdleConnsPerHost: 6}
+	tr := &http.Transport{MaxIdleConnsPerHost: 10}
 	return &Client{httpClient: &http.Client{Transport: tr, Timeout: time.Duration(HTTP_TIMEOUT)}, key: key, logger: l}
 }
 
