@@ -53,7 +53,16 @@ func (c *Client) api(method string, path string, fields url.Values) (body []byte
 		return
 	}
 	req.SetBasicAuth("api", c.key)
-	rsp, err := c.httpClient.Do(req)
+	tr := &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+		Dial: (&net.Dialer{
+			Timeout:   30 * time.Second,
+			KeepAlive: 30 * time.Second,
+		}).Dial,
+		TLSHandshakeTimeout: 30 * time.Second,
+	}
+	client := &http.Client{Transport: tr}
+	rsp, err := client.Do(req)
 	if err != nil {
 		return
 	}
