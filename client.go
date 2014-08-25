@@ -6,6 +6,7 @@ package mailgun
 import (
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
